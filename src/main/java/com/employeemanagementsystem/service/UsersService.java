@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 @Service
 public class UsersService {
@@ -74,9 +75,43 @@ public class UsersService {
 
     /*
     *
-    *
+    * Update User
     *
     * */
+    protected Users updateExistingUser(Long userId, Users browserUser){
+        Users dbUser;
+        try {
+            dbUser = usersRepository.findById(userId).get();
+            dbUser.setUserFullName(
+                    browserUser.getUserFullName()
+            );
+            dbUser.setUserRole(
+                    browserUser.getUserRole()
+            );
+            dbUser.setUserEmailId(
+                    browserUser.getUserEmailId()
+            );
+            dbUser.setUserMobileNumber(
+                    browserUser.getUserMobileNumber()
+            );
+            dbUser.setUserPassword(
+                    browserUser.getUserPassword()
+            );
+            dbUser.setUserDateOfBirth(
+                    browserUser.getUserDateOfBirth()
+            );
+            dbUser.setUserAccountUpdateDateTime(
+                    LocalDateTime.now()
+            );
+            dbUser.setUserGender(
+                    browserUser.getUserGender()
+            );
+            usersRepository.save(dbUser);
+        }catch (NoSuchElementException e){
+            return null;
+        }
+        return dbUser;
+    }
 
 
 }
